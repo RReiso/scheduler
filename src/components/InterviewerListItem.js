@@ -1,8 +1,8 @@
 import React from "react";
 import classNames from "classnames";
-import "components/InterviewListItem.scss";
+import "components/InterviewerListItem.scss";
 
-export default function DayListItem({
+export default function InterviewerListItem({
   id,
   name,
   avatar,
