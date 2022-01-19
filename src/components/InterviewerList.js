@@ -12,7 +12,7 @@ export default function DayListItem({
       <InterviewerListItem
         {...person}
         key={person.id}
-        setInterviewer={setInterviewer}
+        setInterviewer={() => setInterviewer(person.id)}
         selected={person.id === interviewer}
       />
     );
