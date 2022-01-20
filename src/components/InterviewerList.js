@@ -2,18 +2,14 @@ import React from "react";
 import "components/InterviewerList.scss";
 import InterviewerListItem from "components/InterviewerListItem";
 
-export default function DayListItem({
-  interviewers,
-  setInterviewer,
-  interviewer,
-}) {
+export default function InterviewerList({ interviewers, onChange, value }) {
   const allInterviewers = interviewers.map((person) => {
     return (
       <InterviewerListItem
         {...person}
         key={person.id}
-        setInterviewer={() => setInterviewer(person.id)}
-        selected={person.id === interviewer}
+        setInterviewer={() => onChange(person.id)}
+        selected={person.id === value}
       />
     );
   });
