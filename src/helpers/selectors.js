@@ -16,3 +16,13 @@ export function getInterview(state, interview) {
     interviewer: state.interviewers[interviewer],
   };
 }
+
+export function getInterviewersForDay(state, day) {
+  const selectedDay = state.days.filter((singleDay) => singleDay.name === day);
+  let dayInterviewers = [];
+  // Get interviewers if they exist
+  if (selectedDay[0] && selectedDay[0].interviewers) {
+    dayInterviewers = selectedDay[0].interviewers;
+  }
+  return dayInterviewers.map((id) => state.interviewers[id]);
+}
