@@ -13,6 +13,9 @@ import useVisualMode from "hooks/useVisualMode";
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
+const SAVE = "SAVE";
+const DELETE = "DELETE";
+const CONFIRM = "CONFIRM";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
@@ -24,17 +27,45 @@ export default function Appointment(props) {
       student: name,
       interviewer,
     };
-    props.bookInterview(props.id, interview);
-    transition(SHOW);
+    transition(SAVE);
+    props
+      .bookInterview(props.id, interview)
+      .then(() => transition(SHOW))
+      .catch((er) => console.log("error", er));
+  }
+
+  async function destroy() {
+    transition(DELETE);
+    // try {
+    //   await props.cancelInterview(props.id);
+    //   transition(EMPTY);
+    // } catch (er) {
+    //   console.log("error", er);
+    // }
+
+    props
+      .cancelInterview(props.id)
+      .then(() => transition(EMPTY))
+      .catch((er) => console.log("error", er));
   }
 
   return (
     <article className="appointment">
       <Header time={props.time} />
+      {mode === SAVE && <Status message="Saving" />}
+      {mode === DELETE && <Status message="Deleting" />}
+      {mode === CONFIRM && (
+        <Confirm
+          message="Delete the appointment?"
+          onCancel={() => transition(SHOW)}
+          onConfirm={destroy}
+        />
+      )}
       {mode === SHOW && (
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
+          onDelete={() => transition(CONFIRM)}
         />
       )}
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}

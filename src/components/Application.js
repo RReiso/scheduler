@@ -17,28 +17,53 @@ export default function Application(props) {
     interviewers: [],
   });
 
-  function bookInterview(id, interview) {
-    console.log(id, interview);
+  function bookInterview(appointmentID, interview) {
+    console.log(appointmentID, interview);
     const appointment = {
-      ...state.appointments[id],
+      ...state.appointments[appointmentID],
       interview: { ...interview },
     };
     const appointments = {
       ...state.appointments,
-      [id]: appointment,
+      [appointmentID]: appointment,
     };
     setState({
       ...state,
       appointments,
     });
 
-    return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
-      setState({
-        ...state,
-        appointments,
-      });
-    });
+    return axios
+      .put(`/api/appointments/${appointmentID}`, { interview })
+      .then(() => {
+        setState({
+          ...state,
+          appointments,
+        });
+      })
+      .catch((er) => console.log("error", er));
   }
+
+  const cancelInterview = (appointmentID) => {
+    const appointment = {
+      ...state.appointments[appointmentID],
+      interview: null,
+    };
+    const appointments = {
+      ...state.appointments,
+      [appointmentID]: appointment,
+    };
+    console.log("HERE");
+
+    return axios
+      .delete(`/api/appointments/${appointmentID}`)
+      .then(() =>
+        setState({
+          ...state,
+          appointments,
+        })
+      )
+      .catch((er) => console.log("error", er));
+  };
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const dailyInterviewers = getInterviewersForDay(state, state.day);
@@ -92,10 +117,11 @@ export default function Application(props) {
               interview={interview}
               interviewers={dailyInterviewers}
               bookInterview={bookInterview}
+              cancelInterview={cancelInterview}
             />
           );
         })}
-        <Appointment key="last" time="5pm" bookInterview={bookInterview} />
+        <Appointment key="last" time="5pm" cancelInterview={cancelInterview} />
       </section>
     </main>
   );
