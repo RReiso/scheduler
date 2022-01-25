@@ -10,7 +10,6 @@ const useApplicationData = () => {
   });
 
   function bookInterview(appointmentID, interview) {
-    console.log("state", state);
     const appointment = {
       ...state.appointments[appointmentID],
       interview: { ...interview },
@@ -20,14 +19,7 @@ const useApplicationData = () => {
       [appointmentID]: appointment,
     };
 
-    const days = [...state.days];
-    const currentDay = days.find((obj) => (obj.name = state.day));
-    currentDay.spots = currentDay.spots - 1;
-
-    // setState({
-    //   ...state,
-    //   appointments,
-    // });
+    const days = updateSpots(state, appointments);
 
     return axios
       .put(`/api/appointments/${appointmentID}`, { interview })
@@ -51,10 +43,7 @@ const useApplicationData = () => {
       [appointmentID]: appointment,
     };
 
-    const days = [...state.days];
-    const currentDay = days.find((obj) => (obj.name = state.day));
-    currentDay.spots = currentDay.spots + 1;
-
+    const days = updateSpots(state, appointments);
     return axios
       .delete(`/api/appointments/${appointmentID}`)
       .then(() =>
@@ -66,6 +55,20 @@ const useApplicationData = () => {
       )
       .catch((er) => console.log("error", er));
   };
+
+  const updateSpots = (state, appointments) => {
+    const days = state.days.map((obj) => {
+      return { ...obj };
+    });
+    const currentDay = days.find((obj) => obj.name === state.day);
+    let remainingSpots = 0;
+    for (const appID of currentDay.appointments) {
+      !appointments[appID].interview && remainingSpots++;
+    }
+    currentDay.spots = remainingSpots;
+    return days;
+  };
+
   const setDay = (day) => setState({ ...state, day });
 
   useEffect(() => {
