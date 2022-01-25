@@ -13,6 +13,7 @@ const Form = (props) => {
       return;
     }
 
+    setError("");
     props.onSave(name, interviewer);
   }
 
@@ -31,7 +32,10 @@ const Form = (props) => {
       <section className="appointment__card-left">
         <form autoComplete="off" onSubmit={(event) => event.preventDefault()}>
           <input
-            onChange={(e) => setStudent(e.target.value)}
+            onChange={(e) => {
+              setStudent(e.target.value);
+              setError("");
+            }}
             className="appointment__create-input text--semi-bold"
             value={student}
             name="name"

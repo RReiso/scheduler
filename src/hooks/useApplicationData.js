@@ -58,6 +58,7 @@ const useApplicationData = () => {
     });
 
     const currentDay = days.find((obj) => obj.name === state.day);
+    console.log(currentDay);
 
     const remainingSpots = currentDay.appointments.reduce(
       (remainingSpots, appID) => {
