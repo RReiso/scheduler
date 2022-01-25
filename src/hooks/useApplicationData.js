@@ -60,11 +60,17 @@ const useApplicationData = () => {
     const days = state.days.map((obj) => {
       return { ...obj };
     });
+
     const currentDay = days.find((obj) => obj.name === state.day);
-    let remainingSpots = 0;
-    for (const appID of currentDay.appointments) {
-      !appointments[appID].interview && remainingSpots++;
-    }
+
+    const remainingSpots = currentDay.appointments.reduce(
+      (remainingSpots, appID) => {
+        return appointments[appID].interview
+          ? remainingSpots
+          : ++remainingSpots;
+      },
+      0
+    );
     currentDay.spots = remainingSpots;
     return days;
   };
