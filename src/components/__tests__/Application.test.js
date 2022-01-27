@@ -51,6 +51,8 @@ describe("Form", () => {
     fireEvent.click(getByText(appointment, "Save"));
 
     expect(getByText(appointment, "Saving")).toBeInTheDocument();
+
+    // wait for the data to be saved, then get the element
     await waitForElement(() => getByText(appointment, "Lydia Miller-Jones"));
     const day = getAllByTestId(container, "day").find((day) =>
       queryByText(day, "Monday")
