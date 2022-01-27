@@ -1,5 +1,5 @@
 <h1 align="center">
-<img src="./public/images/logo.png" alt="Interview scheduler logo" width="200">
+<img src="./public/images/logoblack.png" alt="Interview scheduler logo" width="200">
 </h1>
 <h3 align="center">Booking an interview has never been easier</h3>
 <p align="center">
